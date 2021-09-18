@@ -14,3 +14,11 @@ jobs:
         app: ci-ice-dev-environment
         on:
           branch: main
+    - stage: production
+      script: skip
+      deploy:
+        provider: heroku
+        api_key: "$HEROKU_AUTH_TOKEN"
+        app: ci-dice-prod-environment
+        on:
+          branch: main
