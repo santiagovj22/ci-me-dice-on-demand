@@ -6,3 +6,11 @@ jobs:
   include:
     - stage: test
       script: python -m pytest -v tests/test_dice.py
+    - stage: build
+      script: skip
+      deploy:
+        provider: heroku
+        api_key: "$HEROKU_API_KEY"
+        app: ci-ice-dev-environment
+        on:
+          branch: main
