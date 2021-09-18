@@ -10,7 +10,7 @@ jobs:
       script: skip
       deploy:
         provider: heroku
-        api_key: "$HEROKU_API_KEY"
+        api_key: "$HEROKU_AUTH_TOKEN"
         app: ci-ice-dev-environment
         on:
           branch: main
