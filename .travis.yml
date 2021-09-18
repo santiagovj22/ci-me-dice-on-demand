@@ -22,3 +22,8 @@ jobs:
         app: ci-dice-prod-environment
         on:
           branch: main
+notifications:
+  slack: 
+    rooms:
+      - secure: "$SLACK_KEY"
+      
