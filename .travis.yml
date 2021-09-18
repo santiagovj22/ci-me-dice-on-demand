@@ -1,6 +1,8 @@
 language: python
+os: linux
+dist: xenial
 install: pip install -r requirements.txt
 jobs:
   include:
     - stage: test
-    - script: python -m pytest -v tests/test_dice.py
+      script: python -m pytest -v tests/test_dice.py
