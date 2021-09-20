@@ -13,7 +13,7 @@ jobs:
       api_key: "$HEROKU_AUTH_TOKEN"
       app: ci-ice-dev-environment
       on:
-        branch: main
+        branch: dev
   - stage: production
     script: skip
     deploy:
