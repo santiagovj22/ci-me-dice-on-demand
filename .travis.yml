@@ -1,25 +1,26 @@
 language: python
-os: linux
-dist: xenial
+services:
+  - docker
+before_install:
+  # install heroku CLI
+  - wget -qO- https://toolbelt.heroku.com/install.sh | sh
+  # login to docker registries (dockerhub + heroku)
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - echo "$HEROKU_PASSWORD" | docker login -u "$HEROKU_USERNAME" --password-stdin registry.heroku.com
 install: pip install -r requirements.txt
 jobs:
   include:
   - stage: test
     script: python -m pytest -v tests/test_dice.py
   - stage: build
-    script: skip
     deploy:
-      provider: heroku
+      provider: script
       api_key: "$HEROKU_AUTH_TOKEN"
-      app: ci-ice-dev-environment
-      on:
-        branch: dev
-  - stage: production
-    script: skip
-    deploy:
-      provider: heroku
-      api_key: "$HEROKU_AUTH_TOKEN"
-      app: ci-dice-prod-environment
+      script:
+        # push to dockerhub & heroku
+        docker push "$DOCKER_USERNAME"/ci-me-dice:1.0;
+        docker push registry.heroku.com/$HEROKU_APP/web;
+        heroku container:release web --app $HEROKU_APP
       on:
         branch: main
 notifications:
