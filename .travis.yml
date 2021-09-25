@@ -13,6 +13,7 @@ jobs:
   - stage: test
     script: python -m pytest -v tests/test_dice.py
   - stage: build
+    script: skip
     deploy:
       provider: script
       api_key: "$HEROKU_AUTH_TOKEN"
