@@ -1,17 +1,11 @@
 language: python
 services:
   - docker
-env:
-  - DOCKER_COMPOSE_VERSION=3.3
 before_install:
   # install heroku CLI
   - wget -qO- https://toolbelt.heroku.com/install.sh | sh
   # login to docker registries (dockerhub + heroku)
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
   # - echo "$HEROKU_PASSWORD" | docker login -u "$HEROKU_USERNAME" --password=$HEROKU_PASSWORD registry.heroku.com
 install: pip install -r requirements.txt
 jobs:
@@ -21,12 +15,11 @@ jobs:
   - stage: build
     script: skip
     deploy:
-      edge: true
       provider: script
       script:
         # push to dockerhub & heroku
-        docker-compose build
-        docker-compose push
+        docker build -t $DOCKER_USERNAME/ci-me-dice
+        docker push $DOCKER_USERNAME/ci-me-dice
         # docker push registry.heroku.com/$HEROKU_APP;
         # heroku container:release web --app $HEROKU_APP
       on:
