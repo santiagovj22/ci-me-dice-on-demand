@@ -6,7 +6,7 @@ before_install:
   - wget -qO- https://toolbelt.heroku.com/install.sh | sh
   # login to docker registries (dockerhub + heroku)
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - echo "$HEROKU_PASSWORD" | docker login -u "$HEROKU_USERNAME" --password=$HEROKU_PASSWORD registry.heroku.com
+  # - echo "$HEROKU_PASSWORD" | docker login -u "$HEROKU_USERNAME" --password=$HEROKU_PASSWORD registry.heroku.com
 install: pip install -r requirements.txt
 jobs:
   include:
@@ -18,9 +18,10 @@ jobs:
       provider: script
       script:
         # push to dockerhub & heroku
-        docker push santiagovj22/ci-me-dice:1.0;
-        docker push registry.heroku.com/$HEROKU_APP;
-        heroku container:release web --app $HEROKU_APP
+        docker-compose build
+        docker-compose push
+        # docker push registry.heroku.com/$HEROKU_APP;
+        # heroku container:release web --app $HEROKU_APP
       on:
         branch: main
 notifications:
