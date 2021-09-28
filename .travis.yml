@@ -18,7 +18,7 @@ jobs:
       provider: script
       script:
         # push to dockerhub & heroku
-        docker build -t $DOCKER_USERNAME/ci-me-dice
+        docker build -t $DOCKER_USERNAME/ci-me-dice .
         docker push $DOCKER_USERNAME/ci-me-dice
         # docker push registry.heroku.com/$HEROKU_APP;
         # heroku container:release web --app $HEROKU_APP
